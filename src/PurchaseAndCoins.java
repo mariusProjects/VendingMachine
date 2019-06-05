@@ -17,4 +17,5 @@ public class PurchaseAndCoins <T1, T2> {
 
         return Coins;
     }
+
 }

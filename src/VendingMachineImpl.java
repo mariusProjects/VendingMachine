@@ -36,13 +36,13 @@ public class VendingMachineImpl implements VendingMachine {
         cashInventory.add(coin);
     }
 
-    /*public void updateCashInventory(List change){
-        for(coin : change){
-            cashInventory.put();
+    public void updateCashInventory(List<Coin> change){
+        for(Coin coin : change){
+            cashInventory.decrease(coin);
 
         }
 
-    }*/
+    }
     public boolean isFullyPaid() {
         if (currentBalance >= currentItem.getPrice()) {
             return true;
@@ -75,6 +75,8 @@ public class VendingMachineImpl implements VendingMachine {
                 continue;
 
             }
+
+
         }
         return changes;
     }
@@ -92,12 +94,60 @@ public class VendingMachineImpl implements VendingMachine {
         return hasChange;
     }
     public boolean hasSufficientChange(){
-        long suficientChange = currentBalance - currentItem;
+        long suficientChange = currentBalance - currentItem.getPrice();
+//        long currentItemPrice = currentItem.getPrice();
+        if(suficientChange <= 0 ){
+            return false;
+        }
+        return true;
     }
-        long currentItemPrice = currentItem.getPrice();
-        if(currentBalance - currentItemPrice ){
+    public Item collectItem(){
+        if(isFullyPaid()== true && hasSufficientChange()){
+            itemInventory.decrease(currentItem);
+        }
+        return currentItem;
+    }
+    public List<Coin> collectChange(){
+        long changeAmount = currentBalance - currentItem.getPrice();
+//        getChange(changeAmount);
+        List<Coin> change = getChange(changeAmount);
+        updateCashInventory(change);
+        currentBalance = 0;
+        currentItem = null;
+        return change;
 
     }
+    public PurchaseAndCoins<Item, List<Coin>> collectItemAndChange(){
+        Item item = collectItem();
+        totalSales = totalSales + currentItem.getPrice();
+        List<Coin> change = collectChange();
+        PurchaseAndCoins<Item, List<Coin>> collectitemAndChange1 = new PurchaseAndCoins<Item, List<Coin>>(item, change);
+        return  collectitemAndChange1;
 
+    }
+    public List<Coin> refund(){
+        List<Coin> refund = getChange(currentBalance);
+        updateCashInventory(refund);
+        currentBalance = 0;
+        currentItem = null;
+        return refund;
+    }
+    public void reset(){
+        itemInventory.clear();
+        cashInventory.clear();
+        totalSales = 0;
+        currentBalance = 0;
+        currentItem = null;
+
+    }
+    public void printStats(){
+        System.out.println("Total sales: " + totalSales);
+        System.out.println("Current Item inventory: " + itemInventory);
+        System.out.println("Current Cash Inventory: " + cashInventory);
+    }
+    public long getTotalSales(){
+        return totalSales;
+
+    }
 
 }
