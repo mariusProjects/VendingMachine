@@ -1,10 +1,11 @@
+import java.util.HashMap;
 import java.util.Map;
 public class Inventory < T >{
     private Map<T, Integer> inventory;
 
     public Inventory() {
 
-        this.inventory = inventory;
+        this.inventory = new HashMap<T, Integer>();
     }
     public int getQuantity(T item){
         int quantity = inventory.get(item);

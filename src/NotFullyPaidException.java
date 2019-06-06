@@ -1,9 +1,9 @@
-public class NotFullyPaidException {
+public class NotFullyPaidException extends Throwable {
 
     private String message;
     private long remaining;
 
-    public NotFullyPaidException(String message, long remaining) {
+    public NotFullyPaidException(String message) {
         this.message = message;
         this.remaining = remaining;
     }

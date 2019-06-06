@@ -1,6 +1,6 @@
-public class MainSoldOutException {
+public class SoldOutException extends Throwable {
     String message;
-    public MainSoldOutException(String message){
+    public SoldOutException(String message){
         this.message = message;
     }
 
